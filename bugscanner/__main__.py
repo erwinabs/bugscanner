@@ -43,6 +43,34 @@ def get_arguments():
 		type=str,
 		default='',
 	)
+	parser.add_argument(
+		'--udp-host',
+		help='UDP server host (for UDP mode)',
+		dest='udp_server_host',
+		type=str,
+		default='bugscanner.tppreborn.my.id',
+	)
+	parser.add_argument(
+		'--udp-port',
+		help='UDP server port (for UDP mode)',
+		dest='udp_server_port',
+		type=str,
+		default='8853',
+	)
+	parser.add_argument(
+		'--ssl-host',
+		help='SSL connect host (for SSL mode)',
+		dest='ssl_connect_host',
+		type=str,
+		default='77.88.8.8',
+	)
+	parser.add_argument(
+		'--ssl-port',
+		help='SSL connect port (for SSL mode)',
+		dest='ssl_connect_port',
+		type=str,
+		default='443',
+	)
 	# parser.add_argument(
 	# 	'--deep',
 	# 	help='subdomain deep',
@@ -78,6 +106,9 @@ def main():
 
 	elif arguments.mode == 'ssl':
 		scanner = SSLScanner()
+		# Assign configurable connection parameters
+		scanner.connect_host = arguments.ssl_connect_host
+		scanner.connect_port = arguments.ssl_connect_port
 
 	elif arguments.mode == 'proxy':
 		if not proxy or len(proxy) != 2:
@@ -88,8 +119,9 @@ def main():
 
 	elif arguments.mode == 'udp':
 		scanner = UdpScanner()
-		scanner.udp_server_host = 'bugscanner.tppreborn.my.id'
-		scanner.udp_server_port = '8853'
+		# Assign configurable server parameters
+		scanner.udp_server_host = arguments.udp_server_host
+		scanner.udp_server_port = arguments.udp_server_port
 
 	else:
 		sys.exit('Not Available!')
@@ -107,3 +139,4 @@ def main():
 
 if __name__ == '__main__':
 	main()
+	
